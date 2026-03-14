@@ -1,0 +1,27 @@
+version: 2
+
+models:
+  - name: silver_livertox_records
+    description: "The typed and extracted Medallion architecture layer for LiverTox DILI records."
+    columns:
+      - name: coreason_id
+        description: "The deterministic UUID generated upstream via polars."
+        tests:
+          - not_null
+          - unique
+
+      - name: ncbi_uid
+        description: "The primary NCBI Books ID mapping to the monograph."
+        tests:
+          - not_null
+
+      - name: agent_name
+        description: "The drug, herb, or supplement name extracted from the Chapter Title."
+        tests:
+          - not_null
+
+      - name: dili_likelihood_score
+        description: "The standardized categorical DILI score (e.g., A, B[HD], E*)."
+
+      - name: hepatotoxicity_summary
+        description: "The core clinical hepatotoxicity summary text."

@@ -46,6 +46,8 @@ dev = [
     "pytest-xdist>=3.6.1",
     "respx>=0.22.0",
     "types-requests>=2.32.4.20260107",
+    "dbt-core>=1.11.7",
+    "dbt-postgres>=1.10.0",
 ]
 
 [tool.hatch.build.targets.wheel]
