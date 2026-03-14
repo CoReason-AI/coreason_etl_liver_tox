@@ -72,6 +72,11 @@ strict = true
 disallow_untyped_defs = true
 warn_unused_ignores = true
 plugins = ["pydantic.mypy"]
+disable_error_code = ["misc", "unused-ignore"]
+
+[tool.uv.sources]
+orjson = { path = "mocks/orjson" }
+pywin32 = { path = "mocks/pywin32", marker = "sys_platform == 'win32'" }
 
 [tool.deptry.per_rule_ignores]
 DEP002 = ["dlt", "polars", "ratelimit", "requests", "xmltodict"]

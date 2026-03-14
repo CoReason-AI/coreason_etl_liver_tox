@@ -50,7 +50,7 @@ def test_retmax_below_minimum() -> None:
         LiverToxConfig(retmax=-1)
 
 
-@given(st.integers(min_value=1, max_value=10000))  # type: ignore[misc]
+@given(st.integers(min_value=1, max_value=10000))
 def test_valid_retmax(retmax_val: int) -> None:
     """Verify that LiverToxConfig handles random valid retmax integers."""
     config = LiverToxConfig(retmax=retmax_val)
