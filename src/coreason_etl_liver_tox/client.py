@@ -85,8 +85,8 @@ class LiverToxClient:
             logger.error("Failed to parse E-Search response", error=str(e), response=data)
             raise KeyError(f"Invalid E-Search response structure: {e}") from e
 
-    @sleep_and_retry  # type: ignore[misc]
-    @limits(calls=10, period=1)  # type: ignore[misc]
+    @sleep_and_retry  # type: ignore[misc, untyped-decorator]
+    @limits(calls=10, period=1)  # type: ignore[misc, untyped-decorator]
     def _efetch_batch(self, webenv: str, query_key: str, retstart: int) -> bytes:
         """Fetch a single paginated batch of XML records from the History Server.
 
