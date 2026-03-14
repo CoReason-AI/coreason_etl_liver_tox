@@ -25,3 +25,27 @@ models:
 
       - name: hepatotoxicity_summary
         description: "The core clinical hepatotoxicity summary text."
+
+  - name: gold_livertox_risk_matrix
+    description: "A highly structured table mapping agent_name directly to dili_likelihood_score."
+    columns:
+      - name: agent_name
+        description: "The causative agent."
+        tests:
+          - not_null
+      - name: dili_likelihood_score
+        description: "The standardized categorical DILI score."
+        tests:
+          - not_null
+
+  - name: gold_livertox_search_index
+    description: "A text-searchable view combining the agent_name and hepatotoxicity_summary designed specifically for ingestion into downstream RAG vector databases."
+    columns:
+      - name: agent_name
+        description: "The causative agent."
+        tests:
+          - not_null
+      - name: hepatotoxicity_summary
+        description: "The hepatotoxicity clinical summary."
+        tests:
+          - not_null
