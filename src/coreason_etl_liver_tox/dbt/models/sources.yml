@@ -1,0 +1,16 @@
+version: 2
+
+sources:
+  - name: public
+    description: "The raw Bronze landing schema from dlt."
+    tables:
+      - name: bronze_livertox_raw
+        description: "Raw LiverTox XML payloads loaded as JSONB by dlt."
+        columns:
+          - name: coreason_id
+            tests:
+              - unique
+              - not_null
+          - name: uid
+          - name: ingestion_ts
+          - name: raw_data
