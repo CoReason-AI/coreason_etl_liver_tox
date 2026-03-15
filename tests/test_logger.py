@@ -30,7 +30,7 @@ def test_logger_mkdir(tmp_path: Path) -> None:
         original_code = f.read()
 
     try:
-        new_logs_dir = str(tmp_path / "new_logs")
+        new_logs_dir = (tmp_path / "new_logs").as_posix()
         patched_code = original_code.replace('Path("logs")', f'Path("{new_logs_dir}")')
         patched_code = patched_code.replace('"logs/app.log"', f'"{new_logs_dir}/app.log"')
 
