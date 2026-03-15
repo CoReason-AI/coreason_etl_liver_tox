@@ -18,6 +18,7 @@ dependencies = [
     "pydantic-settings>=2.13.1",
     "ratelimit>=2.2.1",
     "requests>=2.32.5",
+    "types-xmltodict>=1.0.1.20260113",
     "xmltodict>=1.0.4",
 ]
 license = { file = "LICENSE" }
