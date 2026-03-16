@@ -58,6 +58,7 @@ class EpistemicXmlTransmutationPolicy:
         isolated_blocks: dict[str, str | None] = {
             "hepatotoxicity_summary": None,
             "likelihood_score": None,
+            "mechanism_of_injury": None,
         }
 
         # LiverTox XML structure typically has a root element, then a book, then sections.
@@ -70,6 +71,8 @@ class EpistemicXmlTransmutationPolicy:
             elif "likelihood score" in title.lower() or "likelihood score" in cls._extract_text(sec).lower():
                 # Sometimes the score is in its own section, sometimes embedded.
                 isolated_blocks["likelihood_score"] = cls._extract_text(sec)
+            elif "mechanism of injury" in title.lower():
+                isolated_blocks["mechanism_of_injury"] = cls._extract_text(sec)
 
         return isolated_blocks
 
