@@ -24,7 +24,7 @@ from coreason_etl_liver_tox.utils.logger import logger
 from coreason_etl_liver_tox.utils.xml_transmutation_policy import EpistemicXmlTransmutationPolicy
 
 
-@dlt.source(max_table_nesting=0)  # type: ignore[misc]
+@dlt.source(max_table_nesting=0)
 def livertox_source() -> Any:
     """
     AGENT INSTRUCTION: Defines the dlt source for LiverTox ingestion.
@@ -34,7 +34,7 @@ def livertox_source() -> Any:
     return livertox_resource()
 
 
-@dlt.resource(name="bronze_livertox_raw", write_disposition="merge", primary_key="coreason_id")  # type: ignore[misc]
+@dlt.resource(name="bronze_livertox_raw", write_disposition="merge", primary_key="coreason_id")
 def livertox_resource() -> Iterator[list[dict[str, Any]]]:
     """
     AGENT INSTRUCTION: The core dlt resource executing the History Server
