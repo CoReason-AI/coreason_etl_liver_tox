@@ -16,6 +16,8 @@ sources:
               - not_null
           - name: uid
             description: "The NCBI Source ID"
+          - name: ingestion_ts
+            description: "Timestamp of ingestion."
           - name: raw_data
             description: "Raw XML content transmuted to JSONB."
           - name: extracted_blocks

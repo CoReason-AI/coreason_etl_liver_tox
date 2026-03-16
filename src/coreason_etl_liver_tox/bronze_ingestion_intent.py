@@ -13,6 +13,7 @@ pagination, parsing, shift-left identity generation, and raw document extraction
 """
 
 from collections.abc import Iterator
+from datetime import UTC, datetime
 from typing import Any
 
 import dlt
@@ -108,6 +109,7 @@ def livertox_resource() -> Iterator[list[dict[str, Any]]]:
                 # Assemble the cleaned, flat-ish Bronze record
                 cleaned_doc = {
                     "uid": doc_id,
+                    "ingestion_ts": datetime.now(UTC).isoformat(),
                     "raw_data": doc,
                     "extracted_blocks": blocks,
                     "book_id": book_id,  # for context
