@@ -65,7 +65,7 @@ def test_apply_deterministic_identity_custom_key() -> None:
     assert enriched_records[0]["coreason_id"] == expected_uuid
 
 
-@given(st.lists(st.fixed_dictionaries({"uid": st.text(min_size=1)}), min_size=1, max_size=10))  # type: ignore[misc]
+@given(st.lists(st.fixed_dictionaries({"uid": st.text(min_size=1)}), min_size=1, max_size=10))
 def test_apply_deterministic_identity_property_based(records: list[dict[str, str]]) -> None:
     """Property-based test to ensure deterministic identity injection over random inputs."""
     enriched_records = EpistemicIdentityResolutionPolicy.apply_deterministic_identity(records)
