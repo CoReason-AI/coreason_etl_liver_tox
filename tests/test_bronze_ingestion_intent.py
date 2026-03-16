@@ -79,12 +79,14 @@ def test_livertox_resource_success(
     # Due to recursive text extraction with titles, likelihood score might have "Likelihood score Category A"
     assert records[0]["uid"] == "123"
     assert "coreason_id" in records[0]
+    assert "ingestion_ts" in records[0]
     assert "Category A" in records[0]["extracted_blocks"]["likelihood_score"]
     assert "Liver injury is severe" in records[0]["extracted_blocks"]["hepatotoxicity_summary"]
 
     # Check second record
     assert records[1]["uid"] == "456"
     assert "coreason_id" in records[1]
+    assert "ingestion_ts" in records[1]
     assert "Category B" in records[1]["extracted_blocks"]["likelihood_score"]
 
 
