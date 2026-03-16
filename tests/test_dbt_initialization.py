@@ -52,11 +52,20 @@ def test_dbt_schema_validation() -> None:
     assert "unique" in columns["coreason_id"]
     assert "not_null" in columns["coreason_id"]
 
+    # uid
+    assert "uid" in columns
+
+    # Validate Silver model tests
+    silver_model = next((m for m in schema.get("models", []) if m["name"] == "silver_livertox_records"), None)
+    assert silver_model is not None, "Missing 'silver_livertox_records' model."
+
+    silver_cols = {col["name"]: col.get("data_tests", []) for col in silver_model["columns"]}
+
     # ncbi_uid
-    assert "ncbi_uid" in columns
-    assert "unique" in columns["ncbi_uid"]
-    assert "not_null" in columns["ncbi_uid"]
+    assert "ncbi_uid" in silver_cols
+    assert "unique" in silver_cols["ncbi_uid"]
+    assert "not_null" in silver_cols["ncbi_uid"]
 
     # agent_name
-    assert "agent_name" in columns
-    assert "not_null" in columns["agent_name"]
+    assert "agent_name" in silver_cols
+    assert "not_null" in silver_cols["agent_name"]
