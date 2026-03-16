@@ -72,6 +72,7 @@ def test_isolate_clinical_text_blocks() -> None:
                 {"title": ["Introduction"], "p": ["This is the intro."]},
                 {"title": ["Hepatotoxicity"], "p": ["This drug causes liver injury."]},
                 {"title": ["Likelihood Score"], "p": ["Likelihood score: Category A[HD]"]},
+                {"title": ["Mechanism of Injury"], "p": ["Mechanism of injury."]},
             ]
         }
     }
@@ -81,6 +82,7 @@ def test_isolate_clinical_text_blocks() -> None:
     # Assert that it correctly extracts text from the dictionary containing the relevant sections.
     assert "Hepatotoxicity This drug causes liver injury." in isolated_blocks["hepatotoxicity_summary"]
     assert "Likelihood Score Likelihood score: Category A[HD]" in isolated_blocks["likelihood_score"]
+    assert "Mechanism of Injury Mechanism of injury." in isolated_blocks["mechanism_of_injury"]
 
 
 def test_isolate_clinical_text_blocks_nested() -> None:
@@ -109,6 +111,7 @@ def test_isolate_clinical_text_blocks_not_found() -> None:
     isolated_blocks = EpistemicXmlTransmutationPolicy.isolate_clinical_text_blocks(parsed_dict)
     assert isolated_blocks["hepatotoxicity_summary"] is None
     assert isolated_blocks["likelihood_score"] is None
+    assert isolated_blocks["mechanism_of_injury"] is None
 
 
 def test_extract_text_ignores_attributes() -> None:
