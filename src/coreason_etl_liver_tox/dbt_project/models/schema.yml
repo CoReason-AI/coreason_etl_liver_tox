@@ -1,0 +1,25 @@
+version: 2
+
+sources:
+  - name: bronze
+    description: "Raw XML payloads loaded by dlt into JSONB."
+    database: "{{ target.database }}"
+    schema: "{{ target.schema }}"
+    tables:
+      - name: bronze_livertox_raw
+        description: "Raw document extraction for LiverTox."
+        columns:
+          - name: coreason_id
+            description: "Primary Key (Pre-calculated UUID5 in Python via Polars)"
+            data_tests:
+              - unique
+              - not_null
+          - name: ncbi_uid
+            description: "The NCBI Source ID"
+            data_tests:
+              - unique
+              - not_null
+          - name: agent_name
+            description: "Drug, herb, or supplement name"
+            data_tests:
+              - not_null
