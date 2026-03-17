@@ -86,3 +86,6 @@ DEP002 = ["dlt", "polars", "ratelimit", "requests", "xmltodict", "responses", "d
 
 [tool.coverage.run]
 omit = ["tests/*"]
+
+[tool.deptry]
+ignore = ["DEP002"]

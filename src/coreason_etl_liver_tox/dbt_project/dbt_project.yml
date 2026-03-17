@@ -1,0 +1,20 @@
+name: "coreason_etl_liver_tox"
+version: "1.0.0"
+config-version: 2
+
+profile: "coreason_etl_liver_tox"
+
+model-paths: ["models"]
+analysis-paths: ["analyses"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+models:
+  coreason_etl_liver_tox:
+    +materialized: view

@@ -6,9 +6,6 @@
 # For details, see the LICENSE file.
 # Commercial use beyond a 30-day trial requires a separate license.
 
-from coreason_etl_liver_tox.main import hello_world
+from coreason_etl_liver_tox.config.settings import ConfigurationSettings, settings
 
-
-def test_hello_world() -> None:
-    """Test the hello_world function."""
-    assert hello_world() == "Hello World!"
+__all__ = ["ConfigurationSettings", "settings"]
