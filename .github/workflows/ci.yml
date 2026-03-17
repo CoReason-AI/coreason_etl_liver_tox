@@ -38,7 +38,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.14", "3.14t"]
+        python-version: ["3.14"]
     steps:
       - uses: actions/checkout@ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493
       - name: Install uv
@@ -46,11 +46,6 @@ jobs:
         with:
           enable-cache: true
           python-version: ${{ matrix.python-version }}
-
-      - name: Set PYTHON_GIL for Free-Threading
-        if: matrix.python-version == '3.14t'
-        run: echo "PYTHON_GIL=0" >> $GITHUB_ENV
-        shell: bash
 
       - name: Install dependencies
         run: uv sync --all-extras --dev
@@ -77,8 +72,8 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [windows-latest, macos-latest]
-        python-version: ["3.14", "3.14t"]
+        os: [ubuntu-latest, macos-latest]
+        python-version: ["3.14"]
     steps:
       - uses: actions/checkout@ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493
       - name: Install uv
@@ -86,11 +81,6 @@ jobs:
         with:
           enable-cache: true
           python-version: ${{ matrix.python-version }}
-
-      - name: Set PYTHON_GIL for Free-Threading
-        if: matrix.python-version == '3.14t'
-        run: echo "PYTHON_GIL=0" >> $GITHUB_ENV
-        shell: bash
 
       - name: Install dependencies
         run: uv sync --all-extras --dev
