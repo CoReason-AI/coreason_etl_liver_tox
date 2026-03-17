@@ -33,3 +33,19 @@ def test_logger_initialization() -> None:
 def test_logger_exports() -> None:
     """Test that logger is exported."""
     assert logger is not None
+
+
+def test_logger_mkdir_execution(tmp_path: Path) -> None:
+    """Test that the logger creates the logs directory if it does not exist."""
+    import coreason_etl_liver_tox.utils.logger as logger_module
+
+    # Create a sub-directory in tmp_path that doesn't exist yet
+    test_logs_dir = tmp_path / "logs"
+    assert not test_logs_dir.exists()
+
+    # Call the actual function
+    logger_module.ensure_log_path(str(test_logs_dir))
+
+    # Verify the directory was created
+    assert test_logs_dir.exists()
+    assert test_logs_dir.is_dir()

@@ -30,10 +30,15 @@ logger.add(
     ),
 )
 
-# Ensure logs directory exists
-log_path = Path("logs")
-if not log_path.exists():
-    log_path.mkdir(parents=True, exist_ok=True)
+
+def ensure_log_path(path: str = "logs") -> None:
+    """Ensure the logs directory exists."""
+    log_path = Path(path)
+    if not log_path.exists():
+        log_path.mkdir(parents=True, exist_ok=True)
+
+
+ensure_log_path()
 
 # Sink 2: File (JSON, Rotation, Retention)
 logger.add(
