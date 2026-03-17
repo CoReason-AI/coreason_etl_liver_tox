@@ -117,3 +117,65 @@ jobs:
       - name: Verify SHA256
         run: sha256sum dist/*.whl
         shell: bash
+
+  dbt-test:
+    needs: [lint-and-audit]
+    if: always() && needs.lint-and-audit.result == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+          python-version: '3.12'
+
+      - name: Install dbt-postgres
+        run: uv pip install --system dbt-postgres
+        shell: bash
+
+      - name: Start PostgreSQL
+        run: |
+          docker run --name postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=postgres -p 5432:5432 -d postgres:15
+          sleep 10
+        shell: bash
+
+      - name: Install Python dependencies
+        run: uv sync --all-extras --dev
+        shell: bash
+
+      - name: Run Ingestion Pipeline (Bronze)
+        run: uv run python -m coreason_etl_liver_tox.main
+        shell: bash
+        env:
+          DESTINATION__POSTGRES__CREDENTIALS: "postgresql://postgres:postgres@localhost:5432/postgres"
+
+      - name: Run dbt deps
+        run: dbt deps --project-dir src/coreason_etl_liver_tox/dbt_project
+        shell: bash
+        env:
+          PGHOST: localhost
+          PGPORT: 5432
+          PGUSER: postgres
+          PGPASSWORD: postgres
+          PGDATABASE: postgres
+
+      - name: Run dbt run
+        run: dbt run --project-dir src/coreason_etl_liver_tox/dbt_project --profiles-dir src/coreason_etl_liver_tox/dbt_project
+        shell: bash
+        env:
+          PGHOST: localhost
+          PGPORT: 5432
+          PGUSER: postgres
+          PGPASSWORD: postgres
+          PGDATABASE: postgres
+
+      - name: Run dbt test
+        run: dbt test --project-dir src/coreason_etl_liver_tox/dbt_project --profiles-dir src/coreason_etl_liver_tox/dbt_project
+        shell: bash
+        env:
+          PGHOST: localhost
+          PGPORT: 5432
+          PGUSER: postgres
+          PGPASSWORD: postgres
+          PGDATABASE: postgres
