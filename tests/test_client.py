@@ -16,13 +16,11 @@ from coreason_etl_liver_tox.config import FederatedIngestionConfigManifest
 
 
 @pytest.fixture
-def test_config() -> FederatedIngestionConfigManifest:
+def test_config(monkeypatch: pytest.MonkeyPatch) -> FederatedIngestionConfigManifest:
     """Fixture providing a mock configuration manifest."""
-    import os
-
-    os.environ["LIVERTOX_API_KEY"] = "mock_api_key"
-    os.environ["LIVERTOX_RETMAX"] = "100"
-    os.environ["LIVERTOX_BASE_URL"] = "https://mock.ncbi.nlm.nih.gov/entrez/eutils/"
+    monkeypatch.setenv("LIVERTOX_API_KEY", "mock_api_key")
+    monkeypatch.setenv("LIVERTOX_RETMAX", "100")
+    monkeypatch.setenv("LIVERTOX_BASE_URL", "https://mock.ncbi.nlm.nih.gov/entrez/eutils/")
     return FederatedIngestionConfigManifest()
 
 
