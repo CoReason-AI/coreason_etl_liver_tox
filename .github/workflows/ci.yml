@@ -147,7 +147,7 @@ jobs:
           DESTINATION__POSTGRES__CREDENTIALS: "postgresql://postgres:postgres@localhost:5432/postgres"
 
       - name: Run dbt deps
-        run: uvx --python 3.12 --with dbt-postgres dbt deps --project-dir src/coreason_etl_liver_tox/dbt_project
+        run: uvx --from dbt-core --python 3.12 --with dbt-postgres dbt deps --project-dir src/coreason_etl_liver_tox/dbt_project
         shell: bash
         env:
           PGHOST: localhost
@@ -157,7 +157,7 @@ jobs:
           PGDATABASE: postgres
 
       - name: Run dbt run
-        run: uvx --python 3.12 --with dbt-postgres dbt run --project-dir src/coreason_etl_liver_tox/dbt_project --profiles-dir src/coreason_etl_liver_tox/dbt_project
+        run: uvx --from dbt-core --python 3.12 --with dbt-postgres dbt run --project-dir src/coreason_etl_liver_tox/dbt_project --profiles-dir src/coreason_etl_liver_tox/dbt_project
         shell: bash
         env:
           PGHOST: localhost
@@ -167,7 +167,7 @@ jobs:
           PGDATABASE: postgres
 
       - name: Run dbt test
-        run: uvx --python 3.12 --with dbt-postgres dbt test --project-dir src/coreason_etl_liver_tox/dbt_project --profiles-dir src/coreason_etl_liver_tox/dbt_project
+        run: uvx --from dbt-core --python 3.12 --with dbt-postgres dbt test --project-dir src/coreason_etl_liver_tox/dbt_project --profiles-dir src/coreason_etl_liver_tox/dbt_project
         shell: bash
         env:
           PGHOST: localhost
