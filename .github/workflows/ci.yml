@@ -130,10 +130,6 @@ jobs:
           enable-cache: true
           python-version: '3.12'
 
-      - name: Install dbt-postgres
-        run: uv pip install --system dbt-postgres
-        shell: bash
-
       - name: Start PostgreSQL
         run: |
           docker run --name postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=postgres -p 5432:5432 -d postgres:15
@@ -151,7 +147,7 @@ jobs:
           DESTINATION__POSTGRES__CREDENTIALS: "postgresql://postgres:postgres@localhost:5432/postgres"
 
       - name: Run dbt deps
-        run: dbt deps --project-dir src/coreason_etl_liver_tox/dbt_project
+        run: uv run dbt deps --project-dir src/coreason_etl_liver_tox/dbt_project
         shell: bash
         env:
           PGHOST: localhost
@@ -161,7 +157,7 @@ jobs:
           PGDATABASE: postgres
 
       - name: Run dbt run
-        run: dbt run --project-dir src/coreason_etl_liver_tox/dbt_project --profiles-dir src/coreason_etl_liver_tox/dbt_project
+        run: uv run dbt run --project-dir src/coreason_etl_liver_tox/dbt_project --profiles-dir src/coreason_etl_liver_tox/dbt_project
         shell: bash
         env:
           PGHOST: localhost
@@ -171,7 +167,7 @@ jobs:
           PGDATABASE: postgres
 
       - name: Run dbt test
-        run: dbt test --project-dir src/coreason_etl_liver_tox/dbt_project --profiles-dir src/coreason_etl_liver_tox/dbt_project
+        run: uv run dbt test --project-dir src/coreason_etl_liver_tox/dbt_project --profiles-dir src/coreason_etl_liver_tox/dbt_project
         shell: bash
         env:
           PGHOST: localhost
