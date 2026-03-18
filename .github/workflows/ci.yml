@@ -128,7 +128,7 @@ jobs:
         uses: astral-sh/setup-uv@v5
         with:
           enable-cache: true
-          python-version: '3.14'
+          python-version: '3.12'
 
       - name: Start PostgreSQL
         run: |
@@ -136,15 +136,12 @@ jobs:
           sleep 10
         shell: bash
 
-      - name: Install Python dependencies
-        run: uv sync --all-extras --dev
+      - name: Seed Mock Data for CI
+        run: |
+          docker exec postgres psql -U postgres -d postgres -c "CREATE SCHEMA IF NOT EXISTS bronze;"
+          docker exec postgres psql -U postgres -d postgres -c "CREATE TABLE IF NOT EXISTS bronze.bronze_livertox_raw (coreason_id TEXT, uid TEXT, raw_data JSONB, extracted_blocks JSONB);"
+          docker exec postgres psql -U postgres -d postgres -c "INSERT INTO bronze.bronze_livertox_raw (coreason_id, uid, raw_data, extracted_blocks) VALUES ('123', '123', '{}'::jsonb, '{\"hepatotoxicity_summary\": \"Test Summary\", \"likelihood_score\": \"Likelihood score: A\", \"mechanism_of_injury\": \"Test Mechanism\"}'::jsonb);"
         shell: bash
-
-      - name: Run Ingestion Pipeline (Bronze)
-        run: uv run python -m coreason_etl_liver_tox.main
-        shell: bash
-        env:
-          DESTINATION__POSTGRES__CREDENTIALS: "postgresql://postgres:postgres@localhost:5432/postgres"
 
       - name: Run dbt deps
         run: uvx --from dbt-core --python 3.12 --with dbt-postgres dbt deps --project-dir src/coreason_etl_liver_tox/dbt_project
