@@ -4,7 +4,7 @@ sources:
   - name: bronze
     description: "Raw XML payloads loaded by dlt into JSONB."
     database: "{{ target.database }}"
-    schema: "{{ target.schema }}"
+    schema: "bronze"
     tables:
       - name: bronze_livertox_raw
         description: "Raw document extraction for LiverTox."
