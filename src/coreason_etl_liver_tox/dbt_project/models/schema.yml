@@ -16,6 +16,9 @@ sources:
               - not_null
           - name: uid
             description: "The NCBI Source ID"
+            data_tests:
+              - unique
+              - not_null
           - name: ingestion_ts
             description: "Timestamp of ingestion."
           - name: raw_data
