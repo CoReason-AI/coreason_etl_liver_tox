@@ -20,7 +20,7 @@ WITH source_data AS (
         extracted_blocks ->> 'likelihood_score' AS isolated_text,
         extracted_blocks ->> 'mechanism_of_injury' AS mechanism_of_injury
 
-    FROM {{ source('bronze', 'bronze_livertox_raw') }}
+    FROM {{ source('bronze', 'coreason_etl_liver_tox_bronze_livertox_raw') }}
 )
 
 SELECT

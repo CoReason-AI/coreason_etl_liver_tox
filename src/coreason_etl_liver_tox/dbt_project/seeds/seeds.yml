@@ -1,7 +1,7 @@
 version: 2
 
 seeds:
-  - name: bronze_livertox_raw
+  - name: coreason_etl_liver_tox_bronze_livertox_raw
     config:
       schema: bronze
       column_types:
