@@ -19,24 +19,8 @@ echo "Waiting for PostgreSQL to become ready (optional if already running)..."
 sleep 2
 
 echo "Seeding mock data for local CI..."
-psql -h $PGHOST -U $PGUSER -d $PGDATABASE -c "CREATE SCHEMA IF NOT EXISTS bronze;" || true
-psql -h $PGHOST -U $PGUSER -d $PGDATABASE -c "
-CREATE TABLE IF NOT EXISTS bronze.bronze_livertox_raw (
-    coreason_id TEXT,
-    uid TEXT,
-    raw_data JSONB,
-    extracted_blocks JSONB,
-    ingestion_ts TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);" || true
-
-psql -h $PGHOST -U $PGUSER -d $PGDATABASE -c "
-INSERT INTO bronze.bronze_livertox_raw (coreason_id, uid, raw_data, extracted_blocks)
-VALUES (
-    '123',
-    '123',
-    '{}'::jsonb,
-    '{\"hepatotoxicity_summary\": \"Test Summary\", \"likelihood_score\": \"Likelihood score: A\", \"mechanism_of_injury\": \"Test Mechanism\"}'::jsonb
-);" || true
+# Using Python script to perform complex data seeding and handle edge cases
+python scripts/seed_mock_db.py
 
 echo "Running dbt dependencies via uvx with Python 3.12..."
 uvx --from dbt-core --python 3.12 --with dbt-postgres dbt deps --project-dir src/coreason_etl_liver_tox/dbt_project
