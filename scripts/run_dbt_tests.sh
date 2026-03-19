@@ -18,12 +18,11 @@ echo ""
 echo "Waiting for PostgreSQL to become ready (optional if already running)..."
 sleep 2
 
-echo "Seeding mock data for local CI..."
-# Using Python script to perform complex data seeding and handle edge cases
-python scripts/seed_mock_db.py
-
 echo "Running dbt dependencies via uvx with Python 3.12..."
 uvx --from dbt-core --python 3.12 --with dbt-postgres dbt deps --project-dir src/coreason_etl_liver_tox/dbt_project
+
+echo "Seeding mock data via dbt seeds..."
+uvx --from dbt-core --python 3.12 --with dbt-postgres dbt seed --project-dir src/coreason_etl_liver_tox/dbt_project --profiles-dir src/coreason_etl_liver_tox/dbt_project
 
 echo "Running dbt models via uvx with Python 3.12..."
 uvx --from dbt-core --python 3.12 --with dbt-postgres dbt run --project-dir src/coreason_etl_liver_tox/dbt_project --profiles-dir src/coreason_etl_liver_tox/dbt_project

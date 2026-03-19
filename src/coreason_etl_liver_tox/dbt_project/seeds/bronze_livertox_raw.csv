@@ -1,0 +1,7 @@
+coreason_id,uid,raw_data,extracted_blocks,ingestion_ts
+id-001,uid-001,"{""BookDocument"": {""ArticleTitle"": ""Standard Drug A""}}","{""hepatotoxicity_summary"": ""Standard summary."", ""likelihood_score"": ""Likelihood score: A"", ""mechanism_of_injury"": ""Standard mechanism""}",2023-10-25T12:00:00Z
+id-002,uid-002,"{""BookDocument"": {""Book"": {""BookTitle"": ""Drug B [HD]""}}}","{""hepatotoxicity_summary"": ""Summary B."", ""likelihood_score"": ""Likelihood score: B[HD]"", ""mechanism_of_injury"": ""Mechanism B""}",2023-10-25T12:00:00Z
+id-003,uid-003,"{""article"": {""front"": {""article-meta"": {""title-group"": {""article-title"": ""Drug C Asterisk""}}}}}","{""hepatotoxicity_summary"": ""Summary C."", ""likelihood_score"": ""Likelihood score: C*"", ""mechanism_of_injury"": ""Mechanism C""}",2023-10-25T12:00:00Z
+id-004,uid-004,"{}","{""hepatotoxicity_summary"": """", ""likelihood_score"": """", ""mechanism_of_injury"": """"}",2023-10-25T12:00:00Z
+id-005,uid-005,"{""BookDocument"": {""ArticleTitle"": ""Whitespace Drug""}}","{""hepatotoxicity_summary"": ""Summary W."", ""likelihood_score"": ""Likelihood score:    E"", ""mechanism_of_injury"": ""Mechanism W""}",2023-10-25T12:00:00Z
+id-006,uid-006,"{""BookDocument"": {""ArticleTitle"": ""Invalid Score Drug""}}","{""hepatotoxicity_summary"": ""Summary Inv."", ""likelihood_score"": ""Likelihood score: Z"", ""mechanism_of_injury"": ""Mechanism Inv""}",2023-10-25T12:00:00Z
