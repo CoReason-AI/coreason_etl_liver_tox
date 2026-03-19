@@ -6,7 +6,7 @@ sources:
     database: "{{ target.database }}"
     schema: "bronze"
     tables:
-      - name: bronze_livertox_raw
+      - name: coreason_etl_liver_tox_bronze_livertox_raw
         description: "Raw document extraction for LiverTox."
         columns:
           - name: coreason_id
@@ -27,8 +27,10 @@ sources:
             description: "Isolated clinical text blocks."
 
 models:
-  - name: silver_livertox_records
+  - name: coreason_etl_liver_tox_silver_livertox_records
     description: "Cleaned, Typed, and Entity Extracted records from the Bronze layer."
+    config:
+      schema: silver
     columns:
       - name: coreason_id
         description: "Primary Key (Pre-calculated UUID5 in Python via Polars)"
@@ -51,8 +53,10 @@ models:
       - name: mechanism_of_injury
         description: "Mechanism of injury"
 
-  - name: gold_livertox_search_index
+  - name: coreason_etl_liver_tox_gold_livertox_search_index
     description: "Text-searchable view combining agent_name, hepatotoxicity_summary, and mechanism_of_injury for RAG ingestion."
+    config:
+      schema: gold
     columns:
       - name: agent_name
         description: "Drug, herb, or supplement name"
@@ -63,8 +67,10 @@ models:
       - name: mechanism_of_injury
         description: "Mechanism of injury"
 
-  - name: gold_livertox_risk_matrix
+  - name: coreason_etl_liver_tox_gold_livertox_risk_matrix
     description: "Highly structured table mapping agent_name directly to dili_likelihood_score for programmatic risk assessments."
+    config:
+      schema: gold
     columns:
       - name: agent_name
         description: "Drug, herb, or supplement name"

@@ -1,0 +1,12 @@
+version: 2
+
+seeds:
+  - name: coreason_etl_liver_tox_bronze_livertox_raw
+    config:
+      schema: bronze
+      column_types:
+        coreason_id: text
+        uid: text
+        raw_data: jsonb
+        extracted_blocks: jsonb
+        ingestion_ts: timestamp

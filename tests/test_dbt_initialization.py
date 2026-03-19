@@ -41,8 +41,10 @@ def test_dbt_schema_validation() -> None:
     bronze_source = next((s for s in schema["sources"] if s["name"] == "bronze"), None)
     assert bronze_source is not None, "Missing 'bronze' source definition."
 
-    table = next((t for t in bronze_source["tables"] if t["name"] == "bronze_livertox_raw"), None)
-    assert table is not None, "Missing 'bronze_livertox_raw' table."
+    table = next(
+        (t for t in bronze_source["tables"] if t["name"] == "coreason_etl_liver_tox_bronze_livertox_raw"), None
+    )
+    assert table is not None, "Missing 'coreason_etl_liver_tox_bronze_livertox_raw' table."
 
     # Validate Columns and constraints
     columns = {col["name"]: col.get("data_tests", []) for col in table["columns"]}
@@ -56,8 +58,10 @@ def test_dbt_schema_validation() -> None:
     assert "uid" in columns
 
     # Validate Silver model tests
-    silver_model = next((m for m in schema.get("models", []) if m["name"] == "silver_livertox_records"), None)
-    assert silver_model is not None, "Missing 'silver_livertox_records' model."
+    silver_model = next(
+        (m for m in schema.get("models", []) if m["name"] == "coreason_etl_liver_tox_silver_livertox_records"), None
+    )
+    assert silver_model is not None, "Missing 'coreason_etl_liver_tox_silver_livertox_records' model."
 
     silver_cols = {col["name"]: col.get("data_tests", []) for col in silver_model["columns"]}
 
