@@ -35,7 +35,7 @@ def livertox_source() -> Any:
     return livertox_resource()
 
 
-@dlt.resource(name="bronze_livertox_raw", write_disposition="merge", primary_key="coreason_id")
+@dlt.resource(name="coreason_etl_liver_tox_bronze_livertox_raw", write_disposition="merge", primary_key="coreason_id")
 def livertox_resource() -> Iterator[list[dict[str, Any]]]:
     """
     AGENT INSTRUCTION: The core dlt resource executing the History Server

@@ -136,39 +136,6 @@ jobs:
           sleep 10
         shell: bash
 
-      - name: Seed Mock Data for CI
-        run: |
-          docker exec postgres psql -U postgres -d postgres -c "CREATE SCHEMA IF NOT EXISTS bronze;"
-          docker exec postgres psql -U postgres -d postgres -c "CREATE TABLE IF NOT EXISTS bronze.bronze_livertox_raw (coreason_id TEXT, uid TEXT, raw_data JSONB, extracted_blocks JSONB);"
-          docker exec postgres psql -U postgres -d postgres -c "INSERT INTO bronze.bronze_livertox_raw (coreason_id, uid, raw_data, extracted_blocks) VALUES ('123', '123', '{}'::jsonb, '{\"hepatotoxicity_summary\": \"Test Summary\", \"likelihood_score\": \"Likelihood score: A\", \"mechanism_of_injury\": \"Test Mechanism\"}'::jsonb);"
+      - name: Run dbt tests via bash script
+        run: bash scripts/run_dbt_tests.sh
         shell: bash
-
-      - name: Run dbt deps
-        run: uvx --from dbt-core --python 3.12 --with dbt-postgres dbt deps --project-dir src/coreason_etl_liver_tox/dbt_project
-        shell: bash
-        env:
-          PGHOST: localhost
-          PGPORT: 5432
-          PGUSER: postgres
-          PGPASSWORD: postgres
-          PGDATABASE: postgres
-
-      - name: Run dbt run
-        run: uvx --from dbt-core --python 3.12 --with dbt-postgres dbt run --project-dir src/coreason_etl_liver_tox/dbt_project --profiles-dir src/coreason_etl_liver_tox/dbt_project
-        shell: bash
-        env:
-          PGHOST: localhost
-          PGPORT: 5432
-          PGUSER: postgres
-          PGPASSWORD: postgres
-          PGDATABASE: postgres
-
-      - name: Run dbt test
-        run: uvx --from dbt-core --python 3.12 --with dbt-postgres dbt test --project-dir src/coreason_etl_liver_tox/dbt_project --profiles-dir src/coreason_etl_liver_tox/dbt_project
-        shell: bash
-        env:
-          PGHOST: localhost
-          PGPORT: 5432
-          PGUSER: postgres
-          PGPASSWORD: postgres
-          PGDATABASE: postgres

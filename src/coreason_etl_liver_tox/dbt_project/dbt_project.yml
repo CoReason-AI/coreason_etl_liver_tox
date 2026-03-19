@@ -18,3 +18,7 @@ clean-targets:
 models:
   coreason_etl_liver_tox:
     +materialized: view
+    gold:
+      +schema: gold
+    silver:
+      +schema: silver
