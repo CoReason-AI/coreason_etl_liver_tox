@@ -89,3 +89,6 @@ omit = ["tests/*"]
 
 [tool.deptry]
 ignore = ["DEP002"]
+
+[tool.uv]
+override-dependencies = ["mashumaro[msgpack]>=3.17"]
