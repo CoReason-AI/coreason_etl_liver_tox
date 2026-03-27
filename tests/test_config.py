@@ -5,42 +5,73 @@
 # A copy of the license is available at https://prosperitylicense.com/versions/3.0.0
 # For details, see the LICENSE file.
 # Commercial use beyond a 30-day trial requires a separate license.
-
+#
+# Source Code: https://github.com/CoReason-AI/coreason_etl_liver_tox
 
 import pytest
+from hypothesis import HealthCheck, given, settings
+from hypothesis import strategies as st
 from pydantic import ValidationError
 
-from coreason_etl_liver_tox.config.settings import ConfigurationSettings, settings
+from coreason_etl_liver_tox.config import FederatedIngestionConfigManifest
 
 
-def test_default_settings_load() -> None:
-    """Test that default settings are correctly loaded."""
-    assert settings.ncbi_eutils_base_url == "https://eutils.ncbi.nlm.nih.gov/entrez/eutils"
-    assert settings.ncbi_api_key is None
-    assert settings.ncbi_retmax == 100
-    assert settings.livertox_book_id == "NBK547852"
-    assert settings.log_level == "INFO"
+def test_config_manifest_success(monkeypatch: pytest.MonkeyPatch) -> None:
+    """
+    AGENT INSTRUCTION: Ensure that valid environment variables are successfully
+    parsed into the configuration manifest.
+    """
+    monkeypatch.setenv("LIVERTOX_API_KEY", "test_key_123")
+    monkeypatch.setenv("LIVERTOX_RETMAX", "100")
+
+    config = FederatedIngestionConfigManifest()
+
+    assert config.api_key == "test_key_123"
+    assert config.retmax == 100
+    assert config.base_url == "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/"
 
 
-def test_custom_settings_validation(monkeypatch: pytest.MonkeyPatch) -> None:
-    """Test loading settings from environment variables."""
-    monkeypatch.setenv("NCBI_API_KEY", "test_key")
-    monkeypatch.setenv("NCBI_RETMAX", "50")
-    monkeypatch.setenv("LOG_LEVEL", "DEBUG")
+def test_config_manifest_missing_api_key(monkeypatch: pytest.MonkeyPatch) -> None:
+    """
+    AGENT INSTRUCTION: Ensure validation fails when the required `api_key`
+    is missing from the environment.
+    """
+    monkeypatch.delenv("LIVERTOX_API_KEY", raising=False)
 
-    custom_settings = ConfigurationSettings()
-    assert custom_settings.ncbi_api_key == "test_key"
-    assert custom_settings.ncbi_retmax == 50
-    assert custom_settings.log_level == "DEBUG"
+    with pytest.raises(ValidationError) as exc_info:
+        FederatedIngestionConfigManifest()
+
+    assert "api_key" in str(exc_info.value)
 
 
-def test_invalid_retmax_validation(monkeypatch: pytest.MonkeyPatch) -> None:
-    """Test that setting an invalid retmax raises a ValidationError."""
-    monkeypatch.setenv("NCBI_RETMAX", "1000")  # Should be <= 500
+@settings(suppress_health_check=[HealthCheck.function_scoped_fixture])
+@given(
+    api_key=st.text(min_size=1, alphabet=st.characters(blacklist_categories=("Cc", "Cs"))),
+    retmax=st.integers(min_value=1, max_value=10000),
+)
+def test_config_manifest_property_based(monkeypatch: pytest.MonkeyPatch, api_key: str, retmax: int) -> None:
+    """
+    AGENT INSTRUCTION: Hypothesis-based property test for valid ranges of
+    `api_key` and `retmax`.
+    """
+    monkeypatch.setenv("LIVERTOX_API_KEY", api_key)
+    monkeypatch.setenv("LIVERTOX_RETMAX", str(retmax))
+
+    config = FederatedIngestionConfigManifest()
+
+    assert config.api_key == api_key
+    assert config.retmax == retmax
+
+
+@settings(suppress_health_check=[HealthCheck.function_scoped_fixture])
+@given(retmax=st.one_of(st.integers(max_value=0), st.integers(min_value=10001)))
+def test_config_manifest_invalid_retmax(monkeypatch: pytest.MonkeyPatch, retmax: int) -> None:
+    """
+    AGENT INSTRUCTION: Hypothesis-based property test for invalid ranges of
+    `retmax` ensuring validation errors are triggered.
+    """
+    monkeypatch.setenv("LIVERTOX_API_KEY", "valid_key")
+    monkeypatch.setenv("LIVERTOX_RETMAX", str(retmax))
 
     with pytest.raises(ValidationError):
-        ConfigurationSettings()
-
-    monkeypatch.setenv("NCBI_RETMAX", "0")  # Should be >= 1
-    with pytest.raises(ValidationError):
-        ConfigurationSettings()
+        FederatedIngestionConfigManifest()

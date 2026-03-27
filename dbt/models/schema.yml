@@ -1,0 +1,32 @@
+version: 2
+
+sources:
+  - name: livertox_source
+    schema: public # or whatever schema dlt uses by default for postgres
+    tables:
+      - name: bronze_livertox_raw
+
+models:
+  - name: silver_livertox_records
+    description: "AGENT INSTRUCTION: Parsed and cleaned LiverTox clinical records containing extracted scores."
+    columns:
+      - name: coreason_id
+        description: "Primary key, deterministic UUID pre-computed in Python via Polars."
+        data_tests:
+          - unique
+          - not_null
+      - name: ncbi_uid
+        description: "Source NCBI Book Accession ID."
+        data_tests:
+          - not_null
+          - unique
+      - name: agent_name
+        description: "Name of the drug or herbal supplement."
+        data_tests:
+          - not_null
+      - name: dili_likelihood_score
+        description: "Extracted DILI Likelihood Score (e.g. Category A)."
+      - name: hepatotoxicity_summary
+        description: "Clinical summary of hepatotoxicity."
+      - name: mechanism_of_injury
+        description: "Pathological mechanism of liver injury."
